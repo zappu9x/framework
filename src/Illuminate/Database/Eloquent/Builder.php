@@ -912,7 +912,7 @@ class Builder implements BuilderContract
      *
      * @throws \InvalidArgumentException
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $perPageName = 'per_page')
     {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
 
@@ -921,7 +921,9 @@ class Builder implements BuilderContract
         $perPage = ($perPage instanceof Closure
             ? $perPage($total)
             : $perPage
-        ) ?: $this->model->getPerPage();
+        ) ?: Paginator::resolvePerPage($perPageName);
+
+
 
         $results = $total
             ? $this->forPage($page, $perPage)->get($columns)
@@ -942,11 +944,10 @@ class Builder implements BuilderContract
      * @param  int|null  $page
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
-    public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $perPageName = 'per_page')
     {
         $page = $page ?: Paginator::resolveCurrentPage($pageName);
-
-        $perPage = $perPage ?: $this->model->getPerPage();
+        $perPage = $perPage ?: Paginator::resolvePerPage($perPageName);
 
         // Next we will set the limit and offset for this query so that when we get the
         // results we get the proper section of results. Then, we'll create the full
@@ -968,9 +969,9 @@ class Builder implements BuilderContract
      * @param  \Illuminate\Pagination\Cursor|string|null  $cursor
      * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
-    public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
+    public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null, $perPageName = 'per_page')
     {
-        $perPage = $perPage ?: $this->model->getPerPage();
+        $perPage = $perPage ?: Paginator::resolvePerPage($perPageName);
 
         return $this->paginateUsingCursor($perPage, $columns, $cursorName, $cursor);
     }

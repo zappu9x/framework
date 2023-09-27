@@ -92,13 +92,6 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
     public $preventsLazyLoading = false;
 
     /**
-     * The number of models to return for pagination.
-     *
-     * @var int
-     */
-    protected $perPage = 15;
-
-    /**
      * Indicates if the model exists.
      *
      * @var bool
@@ -2139,29 +2132,6 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
     public function getForeignKey()
     {
         return Str::snake(class_basename($this)).'_'.$this->getKeyName();
-    }
-
-    /**
-     * Get the number of models to return per page.
-     *
-     * @return int
-     */
-    public function getPerPage()
-    {
-        return $this->perPage;
-    }
-
-    /**
-     * Set the number of models to return per page.
-     *
-     * @param  int  $perPage
-     * @return $this
-     */
-    public function setPerPage($perPage)
-    {
-        $this->perPage = $perPage;
-
-        return $this;
     }
 
     /**
